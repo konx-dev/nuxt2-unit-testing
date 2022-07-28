@@ -1,13 +1,13 @@
 /*
 
--- Testing for a generic Hero component -- 
+-- Testing for a generic Hero component --
 
 Assumptions:
 The data layer has been setup appropriately with field limits and required flags
 The component will only ever be used in relation to the corresponding cms field
 
 Fields:
-Heading * - Redactor 
+Heading * - Redactor
 Body - Plaintext
 Image * (limit of 1) - Asset
 Buttons (0, 1 or 2) - Matrix field
@@ -24,19 +24,19 @@ heroContent: {
     ]
 }
 
-Tests: 
+Tests:
 
 [1.] Component renders and all required fields are output to the template - Requirement tbc
 [2.] The heading is rendered and is utilising a H1, dom element: data-testid="hero-header"
 [3.] The image has rendered and has an alt tag, dom element: data-testid="hero-image"
-[4.] Available optional fields are rendered as expected, dom element: data-testid="hero-body" | data-testid="hero-buttons" 
+[4.] Available optional fields are rendered as expected, dom element: data-testid="hero-body" | data-testid="hero-buttons"
 [5.] Unavailable optional fields aren't trying to be rendered
 [6.] Clicking the buttons has a response, dom element: data-testid="hero-button"
 
 */
 
-import { mount } from "@vue/test-utils";
-import HeroSection from '@/components/Hero/HeroSection.vue';
+import { mount } from '@vue/test-utils'
+import HeroSection from '@/components/Hero/HeroSection.vue'
 
 const sampleData = {
     heading: 'Hero Demo Title',
@@ -46,15 +46,12 @@ const sampleData = {
     ],
     buttons: [
         { title: 'button a', link: 'a-link.com/subdfolder' },
-        { title: 'button b', link: 'another-link.com/subfolder'}
+        { title: 'button b', link: 'another-link.com/subfolder' }
     ]
 }
 
-
 describe('HeroSection', () => {
-
-    test('[1.] Component renders and all required fields are output to the template', async () => {
-        
+    test('[1.] Component renders and all required fields are output to the template', () => {
         const wrapper = mount(HeroSection, {
             propsData: {
                 ctx: {
@@ -74,21 +71,18 @@ describe('HeroSection', () => {
     })
     // TEST INCOMPLETE
     test('[2.] The heading is rendering the correct field and is utilising a H1, dom element: data-testid="hero-header"', () => {
-        
         const wrapper = mount(HeroSection, {
             propsData: {
                 ctx: sampleData
             }
         })
         const h1 = wrapper.find('h1')
-        const headingText = h1.text()
-        
-        expect(wrapper.find('h1').exists()).toBe(true);
+
+        expect(wrapper.find('h1').exists()).toBe(true)
         expect(h1.text()).toContain(sampleData.heading)
     })
 
     test('[3.] The image has rendered and has an alt tag, dom element: data-testid="hero-image"', () => {
-        
         const wrapper = mount(HeroSection, {
             propsData: {
                 ctx: sampleData
@@ -96,8 +90,6 @@ describe('HeroSection', () => {
         })
 
         const image = wrapper.find('[data-testid=hero-image]')
-
         expect(image.exists()).toBeTruthy()
     })
-
 })
