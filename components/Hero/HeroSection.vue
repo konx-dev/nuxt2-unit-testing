@@ -28,14 +28,14 @@
                         <h1 data-testid="hero-header" class="hero__heading text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                             {{ ctx.heading }}
                         </h1>
-                        <p v-if="ctx.body" class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                        <p v-if="ctx.body" data-testid="hero-body" class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                             {{ ctx.body }}
                         </p>
-                        <div v-if="ctx.buttons.length > 0" class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div class="rounded-md shadow">
+                        <div v-if="ctx.buttons.length > 0" data-testid="hero-buttons" class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                            <div data-testid="hero-button" class="rounded-md shadow">
                                 <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"> Get started </a>
                             </div>
-                            <div class="mt-3 sm:mt-0 sm:ml-3">
+                            <div data-testid="hero-button" class="mt-3 sm:mt-0 sm:ml-3">
                                 <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"> Live demo </a>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img data-testid="hero-image" class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" :src="ctx.image.url" :alt="ctx.image.url">
+            <img data-testid="hero-image" class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" :src="ctx.image.url" :alt="ctx.image.title">
         </div>
     </div>
 </template>

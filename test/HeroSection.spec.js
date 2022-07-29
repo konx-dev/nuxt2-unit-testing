@@ -5,6 +5,7 @@
 Assumptions:
 The data layer has been setup appropriately with field limits and required flags
 The component will only ever be used in relation to the corresponding cms field
+We will test both the rendering of the elements as well as match against props
 
 Fields:
 Heading * - Redactor
@@ -24,72 +25,88 @@ heroContent: {
     ]
 }
 
-Tests:
+Requirements:
 
-[1.] Component renders and all required fields are output to the template - Requirement tbc
-[2.] The heading is rendered and is utilising a H1, dom element: data-testid="hero-header"
-[3.] The image has rendered and has an alt tag, dom element: data-testid="hero-image"
-[4.] Available optional fields are rendered as expected, dom element: data-testid="hero-body" | data-testid="hero-buttons"
-[5.] Unavailable optional fields aren't trying to be rendered
-[6.] Clicking the buttons has a response, dom element: data-testid="hero-button"
+* Component renders and all required fields are output to the template
+* The heading (required) is rendered and is utilising a H1, dom element: data-testid="hero-header"
+* The image (required) has rendered and has an alt tag, dom element: data-testid="hero-image"
+* Available optional fields are rendered as expected, dom element: data-testid="hero-body" | data-testid="hero-buttons"
+* Unavailable optional fields aren't trying to be rendered
+* Clicking the buttons has a response, dom element: data-testid="hero-button"
 
 */
 
 import { mount } from '@vue/test-utils'
 import HeroSection from '@/components/Hero/HeroSection.vue'
 
-const sampleData = {
-    heading: 'Hero Demo Title',
-    body: 'Hero Demo body copy here',
-    image: [
-        { title: 'An Image', url: '/an-image-filepath.jpg' }
-    ],
-    buttons: [
-        { title: 'button a', link: 'a-link.com/subdfolder' },
-        { title: 'button b', link: 'another-link.com/subfolder' }
-    ]
-}
-
 describe('HeroSection', () => {
-    test('[1.] Component renders and all required fields are output to the template', () => {
+    test('Component renders and all required fields are output to the template', () => {
+        const ctx = {
+            heading: '<p>Data to enrich your <em>online business</em></p>',
+            body: null,
+            image: { title: 'Placeholder image', url: 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80' },
+            buttons: []
+        }
+
         const wrapper = mount(HeroSection, {
             propsData: {
-                ctx: {
-                    heading: '<p>Data to enrich your <em>online business</em></p>',
-                    body: null,
-                    image: { title: 'Placeholder image', url: 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80' },
-                    buttons: []
-                }
+                ctx
             }
         })
 
-        const heading = wrapper.find('[data-testid=hero-header]')
-        const image = wrapper.find('[data-testid=hero-image]')
+        const heroHeader = wrapper.find('[data-testid=hero-header]') // identified by test-utils tag
+        expect(heroHeader.exists()).toBeTruthy() // visibility check
+        expect(heroHeader.html()).toContain('<h1') // a11y check for h1 - overkill here?
+        expect(heroHeader.text()).toContain(ctx.heading) // check the right prop is rendered to the component
 
-        expect(heading.exists()).toBeTruthy()
-        expect(image.exists()).toBeTruthy()
-    })
-    // TEST INCOMPLETE
-    test('[2.] The heading is rendering the correct field and is utilising a H1, dom element: data-testid="hero-header"', () => {
-        const wrapper = mount(HeroSection, {
-            propsData: {
-                ctx: sampleData
-            }
-        })
-        const h1 = wrapper.find('h1')
-
-        expect(wrapper.find('h1').exists()).toBe(true)
-        expect(h1.text()).toContain(sampleData.heading)
+        const image = wrapper.find('[data-testid=hero-image]') // identified by test-utils tag
+        expect(image.exists()).toBeTruthy() // visibility check
+        expect(image.attributes('src')).toContain(ctx.image.url) // check the right prop is rendered to the component
+        expect(image.attributes('alt')).toContain(ctx.image.title) // a11y check for alt tag and prop
     })
 
-    test('[3.] The image has rendered and has an alt tag, dom element: data-testid="hero-image"', () => {
+    test('Available optional fields are rendered as expected', () => {
+        const ctx = {
+            heading: null,
+            body: 'Hero Demo body copy here',
+            image: [],
+            buttons: [
+                { title: 'button a', link: 'a-link.com/subdfolder' },
+                { title: 'button b', link: 'another-link.com/subfolder' }
+            ]
+        }
+
         const wrapper = mount(HeroSection, {
             propsData: {
-                ctx: sampleData
+                ctx
             }
         })
 
-        const image = wrapper.find('[data-testid=hero-image]')
-        expect(image.exists()).toBeTruthy()
+        const heroBody = wrapper.find('[data-testid=hero-body]')
+        expect(heroBody.text()).toContain(ctx.body)
+
+        const heroButtons = wrapper.find('[data-testid=hero-buttons]')
+        expect(heroButtons.exists()).toBeTruthy()
+    })
+
+    test("Unavailable optional fields aren't trying to be rendered", () => {
+        const ctx = {
+            heading: null,
+            body: null,
+            image: [],
+            buttons: []
+        }
+
+        const wrapper = mount(HeroSection, {
+            propsData: {
+                ctx
+            }
+        })
+
+        const heroBody = wrapper.find('[data-testid=hero-body]')
+        expect(heroBody.exists()).toBeFalsy()
+
+        const heroButtons = wrapper.find('[data-testid=hero-buttons]')
+        expect(heroButtons.exists()).toBeFalsy()
     })
 })
