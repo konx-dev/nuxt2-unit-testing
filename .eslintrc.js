@@ -17,6 +17,7 @@ module.exports = {
     // add your custom rules here
     rules: {
         'vue/html-indent': ['warn', 4],
-        indent: ['warn', 4]
+        indent: ['warn', 4],
+        'vue/no-v-html': ['off', 0]
     }
 }

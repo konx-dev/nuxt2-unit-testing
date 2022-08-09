@@ -24,20 +24,21 @@
 
                 <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
                     <div class="sm:text-center lg:text-left">
-                        <!-- <h1 data-testid="hero-header" class="hero__heading text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl" v-html="ctx.heading" /> -->
-                        <h1 data-testid="hero-header" class="hero__heading text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                            {{ ctx.heading }}
-                        </h1>
+                        <h1 data-testid="hero-header" class="hero__heading text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl" v-html="ctx.heading" />
                         <p v-if="ctx.body" data-testid="hero-body" class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                             {{ ctx.body }}
                         </p>
-                        <div v-if="ctx.buttons.length > 0" data-testid="hero-buttons" class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div data-testid="hero-button" class="rounded-md shadow">
-                                <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"> Get started </a>
-                            </div>
-                            <div data-testid="hero-button" class="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"> Live demo </a>
-                            </div>
+                        <div v-if="ctx.buttons.length > 0" data-testid="hero-buttons" class="mt-5 sm:mt-8 flex flex-col sm:flex-row justify-center lg:justify-start">
+                            <a
+                                v-for="(button,index) in ctx.buttons"
+                                :key="index"
+                                :href="button.link"
+                                data-testid="hero-button"
+                                :class="buttonStyles(index)"
+                                class="rounded-md shadow px-8 py-3 border border-transparent text-base font-medium rounded-md md:py-4 md:text-lg md:px-10"
+                            >
+                                <span class="w-full flex items-center justify-center">{{ button.text }}</span>
+                            </a>
                         </div>
                     </div>
                 </main>
@@ -55,6 +56,15 @@ export default {
         ctx: {
             type: Object,
             required: true
+        }
+    },
+    methods: {
+        buttonStyles (val) {
+            if (val === 0) {
+                return 'mb-3 sm:mb-0 sm:mr-3 text-white bg-indigo-600 hover:bg-indigo-700'
+            } else {
+                return 'text-indigo-700 bg-indigo-100 hover:bg-indigo-200'
+            }
         }
     }
 }

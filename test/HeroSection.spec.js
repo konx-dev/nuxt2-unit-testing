@@ -32,7 +32,7 @@ Requirements:
 * The image (required) has rendered and has an alt tag, dom element: data-testid="hero-image"
 * Available optional fields are rendered as expected, dom element: data-testid="hero-body" | data-testid="hero-buttons"
 * Unavailable optional fields aren't trying to be rendered
-* Clicking the buttons has a response, dom element: data-testid="hero-button"
+* Clicking a button has a response, dom element: data-testid="hero-button"
 
 */
 
@@ -40,9 +40,9 @@ import { mount } from '@vue/test-utils'
 import HeroSection from '@/components/Hero/HeroSection.vue'
 
 describe('HeroSection', () => {
-    test('Component renders and all required fields are output to the template', () => {
+    it('Component renders and all required fields are output to the template', () => {
         const ctx = {
-            heading: '<p>Data to enrich your <em>online business</em></p>',
+            heading: 'Data to enrich your online business',
             body: null,
             image: { title: 'Placeholder image', url: 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80' },
             buttons: []
@@ -56,7 +56,7 @@ describe('HeroSection', () => {
 
         const heroHeader = wrapper.find('[data-testid=hero-header]') // identified by test-utils tag
         expect(heroHeader.exists()).toBeTruthy() // visibility check
-        expect(heroHeader.html()).toContain('<h1') // a11y check for h1 - overkill here?
+        expect(heroHeader.html()).toContain('<h1') // a11y check for h1
         expect(heroHeader.text()).toContain(ctx.heading) // check the right prop is rendered to the component
 
         const image = wrapper.find('[data-testid=hero-image]') // identified by test-utils tag
@@ -65,7 +65,7 @@ describe('HeroSection', () => {
         expect(image.attributes('alt')).toContain(ctx.image.title) // a11y check for alt tag and prop
     })
 
-    test('Available optional fields are rendered as expected', () => {
+    it('Available optional fields are rendered as expected', () => {
         const ctx = {
             heading: null,
             body: 'Hero Demo body copy here',
@@ -89,7 +89,7 @@ describe('HeroSection', () => {
         expect(heroButtons.exists()).toBeTruthy()
     })
 
-    test("Unavailable optional fields aren't trying to be rendered", () => {
+    it("Unavailable optional fields aren't trying to be rendered", () => {
         const ctx = {
             heading: null,
             body: null,
@@ -108,5 +108,26 @@ describe('HeroSection', () => {
 
         const heroButtons = wrapper.find('[data-testid=hero-buttons]')
         expect(heroButtons.exists()).toBeFalsy()
+    })
+
+    it("Clicking a button has a response - WIP", async () => {
+        const ctx = {
+            heading: null,
+            body: null,
+            image: [],
+            buttons: [
+                { title: 'button a', link: 'a-link.com/subdfolder' },
+                { title: 'button b', link: 'another-link.com/subfolder' }
+            ]
+        }
+
+        const wrapper = mount(HeroSection, {
+            propsData: {
+                ctx
+            }
+        })
+
+        const heroButtons = wrapper.find('[data-testid=hero-button]')
+        expect(heroButtons.exists()).toBeTruthy()
     })
 })
