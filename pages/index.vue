@@ -1,22 +1,16 @@
 <template>
     <div>
-        <HeroSection :ctx="heroContent" />
-        <CTASection />
-        <FeaturedSection />
+        <HeroDefault :ctx="heroContent" />
     </div>
 </template>
 
 <script>
-import FeaturedSection from '@/components/FeaturedSection'
-import CTASection from '@/components/CTASection'
-import HeroSection from '@/components/Hero/HeroSection'
+import HeroDefault from '@/components/HeroDefault'
 
 export default {
     name: 'IndexPage',
     components: {
-        FeaturedSection,
-        CTASection,
-        HeroSection
+        HeroDefault
     },
     data () {
         return {
