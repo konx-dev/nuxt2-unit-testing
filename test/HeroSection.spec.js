@@ -110,7 +110,7 @@ describe('HeroSection', () => {
         expect(heroButtons.exists()).toBeFalsy()
     })
 
-    it("Clicking a button has a response - WIP", async () => {
+    it('Clicking a button has a response - WIP', () => {
         const ctx = {
             heading: null,
             body: null,
